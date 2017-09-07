@@ -1,9 +1,11 @@
 // 该文件用于放置开发环境下gulp调用的任务
 var gulp = require('gulp');
-var autoprefixer = require('gulp-autoprefixer');
 var rename = require('gulp-rename');
 var cssnano = require('gulp-cssnano');
+// less编译成css
 var less = require('gulp-less');
+// 处理css中浏览器兼容的前缀 
+var autoprefixer = require('gulp-autoprefixer');
 // var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
@@ -37,7 +39,7 @@ function dev() {
 
     /*less*/
     gulp.task('less:dev', function() {
-        return gulp.src(Config.less.src).pipe(less()).pipe(gulp.dest(Config.less.dist)).pipe(reload({
+        return gulp.src(Config.less.src).pipe(autoprefixer('last 2 version')).pipe(less()).pipe(gulp.dest(Config.less.dist)).pipe(reload({
             stream: true
         }));
     });
