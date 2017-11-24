@@ -15,8 +15,15 @@ var reload = browserSync.reload;
 var Config = require('./gulpfile.config.js');
 
 // gulp dev 开发环境
-function dev() {
-    gulp.task('html:dev', function() {
+var dev = function () {
+    // 根目錄
+    // gulp.task('src:dev',function(){
+    //     return gulp.src(Config.src).pipe(gulp.dest(Config.dist)).pipe(reload({
+    //         stream : true
+    //     }))
+    // })
+    // HTML文件
+    gulp.task('html:dev', function () {
         return gulp.src(Config.html.src).pipe(gulp.dest(Config.html.dist)).pipe(reload({
             stream: true
         }));
@@ -24,35 +31,54 @@ function dev() {
 
 
     /*assets 文件夹下的所用文件*/
-    gulp.task('assets:dev', function() {
-        return gulp.src(Config.assets.src).pipe(gulp.dest(Config.assets.dist)).pipe(reload({ stream: true }));
+    gulp.task('assets:dev', function () {
+        return gulp.src(Config.assets.src).pipe(gulp.dest(Config.assets.dist)).pipe(reload({
+            stream: true
+        }));
 
     });
 
-    /*css*/
-    gulp.task('css:dev', function() {
+    /*css文件處理*/
+    gulp.task('css:dev', function () {
         return gulp.src(Config.css.src).pipe(gulp.dest(Config.css.dist)).pipe(reload({
             stream: true
         }));
     });
 
 
-    /*less*/
-    gulp.task('less:dev', function() {
-        return gulp.src(Config.less.src).pipe(autoprefixer('last 2 version')).pipe(less()).pipe(gulp.dest(Config.less.dist)).pipe(reload({
-            stream: true
-        }));
+    /*less文件處理*/
+    gulp.task('less:dev', function () {
+        return gulp.src(Config.less.src)
+            .pipe(autoprefixer('last 2 version'))
+            .pipe(less()).pipe(gulp.dest(Config.less.dist))
+            .pipe(reload({
+                stream: true
+            }));
+    });
+
+    /** 
+     * 图片处理 
+     */
+    gulp.task('images', function () {
+        return gulp.src(Config.img.src).pipe(gulp.dest(Config.img.dist));
     });
 
 
+    // js输出
+    gulp.task('js:dev', function () {
+        return gulp.src(Config.js.src).pipe(gulp.dest(Config.js.dist));
+    });
 
-    gulp.task('dev', ['html:dev', 'css:dev', 'less:dev', 'assets:dev'], function() {
+
+    gulp.task('dev', ['html:dev', 'css:dev', 'less:dev', 'assets:dev', 'js:dev', 'images'], function () {
         browserSync.init({
             server: {
                 baseDir: Config.dist
             },
-            notify: false
+            // notify: false
         });
+        //Watch src 根目錄
+        // gulp.watch(Config.html.src, ['src:dev']).on('change', reload);
         // Watch .html files  
         gulp.watch(Config.html.src, ['html:dev']).on('change', reload);
         // Watch .css files  
@@ -62,10 +88,11 @@ function dev() {
         // Watch assets files  
         gulp.watch(Config.assets.src, ['assets:dev']).on('change', reload);
         // Watch .js files  
-        // gulp.watch(Config.js.src, ['js:dev']).on('change', reload);
+        gulp.watch(Config.js.src, ['js:dev']).on('change', reload);
         // Watch image files  
-        // gulp.watch(Config.img.src, ['images:dev']).on('change', reload);
+        gulp.watch(Config.img.src, ['images']).on('change', reload);
     });
 }
+
 //======= gulp dev 开发环境下 ===============
 module.exports = dev;
