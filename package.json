@@ -1,7 +1,7 @@
 {
     "name": "Gulp-Workflow",
     "version": "1.0.0",
-    "description": "gulp的工作流",
+    "description": "gulp的工作流,多页面开发,website,gulp,less",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
