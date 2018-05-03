@@ -4,24 +4,15 @@ var rename = require('gulp-rename');
 var cssnano = require('gulp-cssnano');
 // less编译成css
 var less = require('gulp-less');
-// 处理css中浏览器兼容的前缀 
+// 处理css中浏览器兼容的前缀
 var autoprefixer = require('gulp-autoprefixer');
-// var jshint = require('gulp-jshint');
-var uglify = require('gulp-uglify');
-var concat = require('gulp-concat');
-var imagemin = require('gulp-imagemin');
 var browserSync = require('browser-sync').create();
+var babel = require('gulp-babel');
 var reload = browserSync.reload;
 var Config = require('./gulpfile.config.js');
 
 // gulp dev 开发环境
 var dev = function () {
-    // 根目錄
-    // gulp.task('src:dev',function(){
-    //     return gulp.src(Config.src).pipe(gulp.dest(Config.dist)).pipe(reload({
-    //         stream : true
-    //     }))
-    // })
     // HTML文件
     gulp.task('html:dev', function () {
         return gulp.src(Config.html.src).pipe(gulp.dest(Config.html.dist)).pipe(reload({
@@ -38,7 +29,7 @@ var dev = function () {
 
     });
 
-    /*css文件處理*/
+    /*css文件处理*/
     gulp.task('css:dev', function () {
         return gulp.src(Config.css.src).pipe(gulp.dest(Config.css.dist)).pipe(reload({
             stream: true
@@ -46,7 +37,7 @@ var dev = function () {
     });
 
 
-    /*less文件處理*/
+    /*less文件处理*/
     gulp.task('less:dev', function () {
         return gulp.src(Config.less.src)
             .pipe(autoprefixer('last 2 version'))
@@ -66,7 +57,12 @@ var dev = function () {
 
     // js输出
     gulp.task('js:dev', function () {
-        return gulp.src(Config.js.src).pipe(gulp.dest(Config.js.dist));
+        return gulp.src(Config.js.src)
+        //babel编译
+        .pipe(babel({
+            presets: ['env']
+        }))
+        .pipe(gulp.dest(Config.js.dist));
     });
 
 
@@ -77,7 +73,7 @@ var dev = function () {
             },
             // notify: false
         });
-        //Watch src 根目錄
+        //Watch src 目录
         // gulp.watch(Config.html.src, ['src:dev']).on('change', reload);
         // Watch .html files  
         gulp.watch(Config.html.src, ['html:dev']).on('change', reload);
